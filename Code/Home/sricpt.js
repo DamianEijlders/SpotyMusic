@@ -6,6 +6,7 @@ fetch('../songs.json')
 
         songs.forEach((song) => {
             const card = document.createElement('div');
+            card.classList = 'text-center';
             console.log(song);
             card.innerHTML = `
         <div class="">
