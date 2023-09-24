@@ -2,7 +2,7 @@ const songcards = document.getElementById('songcards');
 fetch('../songs.json')
     .then((response) => response.json())
     .then((data) => {
-        const { songs } = data; // Access the array of songs
+        const { songs } = data;
 
         songs.forEach((song) => {
             const card = document.createElement('div');
