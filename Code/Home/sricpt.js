@@ -2,17 +2,14 @@ const songcards = document.getElementById('songcards');
 const progressBar = document.getElementById('progressBar');
 const progressdata = document.getElementById('progressdata');
 
-// Function to show the progress bar
 function showProgressBar() {
     progressBar.style.display = 'block';
 }
 
-// Function to hide the progress bar
 function hideProgressBar() {
     progressBar.style.display = 'none';
 }
 
-// Add a click event listener to each button
 fetch('../songs.json')
     .then((response) => response.json())
     .then((data) => {
@@ -44,13 +41,11 @@ fetch('../songs.json')
       `;
             const button = card.querySelector('button');
             button.addEventListener('click', () => {
-                showProgressBar();
                 setTimeout(() => {
                     progressdata.innerHTML = `Song: ${songs[index].title}`;
                     console.log('Data for index', index, ':', songs[index]);
-
-                    // hideProgressBar();
-                }, 2000);
+                    showProgressBar();
+                }, 1000);
             });
 
             songcards.appendChild(card);
