@@ -146,11 +146,11 @@
         class="items-center justify-center hidden mr-auto text-gray-500 dark:text-gray-400 md:flex"
       >
         <img id="songimage"
-          class="h-8 mr-3 rounded mt-2"
+          class="h-8 rounded mt-2"
           src=""
-          alt="Video preview"
+          alt="Songimage"
         />
-        <span id="songtitle" class="text-sm"></span>
+        <span id="songtitle" class="text-sm ml-2"></span>
       </div>
       <div class="flex items-center w-full">
         <div class="w-full">
@@ -175,14 +175,14 @@
                   d="M11.484 6.166 13 4h6m0 0-3-3m3 3-3 3M1 14h5l1.577-2.253M1 4h5l7 10h6m0 0-3 3m3-3-3-3"
                 />
               </svg>
-              <span class="sr-only">Shuffle video</span>
+              <span class="sr-only">Shuffle</span>
             </button>
             <div
               id="tooltip-shuffle"
               role="tooltip"
               class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
             >
-              Shuffle video
+              Shuffle
               <div class="tooltip-arrow" data-popper-arrow></div>
             </div>
             <button
@@ -201,14 +201,14 @@
                   d="M10.819.4a1.974 1.974 0 0 0-2.147.33l-6.5 5.773A2.014 2.014 0 0 0 2 6.7V1a1 1 0 0 0-2 0v14a1 1 0 1 0 2 0V9.3c.055.068.114.133.177.194l6.5 5.773a1.982 1.982 0 0 0 2.147.33A1.977 1.977 0 0 0 12 13.773V2.227A1.977 1.977 0 0 0 10.819.4Z"
                 />
               </svg>
-              <span class="sr-only">Previous video</span>
+              <span class="sr-only">Previous Song</span>
             </button>
             <div
               id="tooltip-previous"
               role="tooltip"
               class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
             >
-              Previous video
+              Previous Song
               <div class="tooltip-arrow" data-popper-arrow></div>
             </div>
             <button
@@ -229,14 +229,14 @@
                   clip-rule="evenodd"
                 />
               </svg>
-              <span class="sr-only">Pause video</span>
+              <span class="sr-only">Pause Song</span>
             </button>
             <div
               id="tooltip-pause"
               role="tooltip"
               class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
             >
-              Pause video
+              Pause Song
               <div class="tooltip-arrow" data-popper-arrow></div>
             </div>
             <button
@@ -255,14 +255,14 @@
                   d="M11 0a1 1 0 0 0-1 1v5.7a2.028 2.028 0 0 0-.177-.194L3.33.732A2 2 0 0 0 0 2.227v11.546A1.977 1.977 0 0 0 1.181 15.6a1.982 1.982 0 0 0 2.147-.33l6.5-5.773A1.88 1.88 0 0 0 10 9.3V15a1 1 0 1 0 2 0V1a1 1 0 0 0-1-1Z"
                 />
               </svg>
-              <span class="sr-only">Next video</span>
+              <span class="sr-only">Next Song</span>
             </button>
             <div
               id="tooltip-next"
               role="tooltip"
               class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
             >
-              Next video
+              Next Song
               <div class="tooltip-arrow" data-popper-arrow></div>
             </div>
             <button
@@ -285,14 +285,14 @@
                   d="M16 1v5h-5M2 19v-5h5m10-4a8 8 0 0 1-14.947 3.97M1 10a8 8 0 0 1 14.947-3.97"
                 />
               </svg>
-              <span class="sr-only">Restart video</span>
+              <span class="sr-only">Repeat video</span>
             </button>
             <div
               id="tooltip-restart"
               role="tooltip"
               class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
             >
-              Restart video
+              Repeat
               <div class="tooltip-arrow" data-popper-arrow></div>
             </div>
           </div>
@@ -342,24 +342,6 @@
           View playlist
           <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
-        <button
-          data-tooltip-target="tooltip-captions"
-          type="button"
-          class="p-2.5 group rounded-full hover:bg-gray-100 mr-1 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-600 dark:hover:bg-gray-600"
-        >
-          <svg
-            class="w-4 h-4 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            viewBox="0 0 20 16"
-          >
-            <path
-              d="M18 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2ZM7.648 9.636c.25 0 .498-.064.717-.186a1 1 0 1 1 .979 1.745 3.475 3.475 0 1 1 .185-5.955 1 1 0 1 1-1.082 1.681 1.475 1.475 0 1 0-.799 2.715Zm6.186 0c.252 0 .5-.063.72-.187a1 1 0 1 1 .974 1.746 3.475 3.475 0 1 1 .188-5.955 1 1 0 0 1-1.084 1.681 1.475 1.475 0 1 0-.8 2.715h.002Z"
-            />
-          </svg>
-          <span class="sr-only">Captions</span>
-        </button>
         <div
           id="tooltip-captions"
           role="tooltip"

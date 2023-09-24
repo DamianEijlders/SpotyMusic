@@ -43,7 +43,7 @@ fetch('../songs.json')
             const button = card.querySelector('button');
             button.addEventListener('click', () => {
                 setTimeout(() => {
-                    songtitle.innerHTML = songs[index].title;
+                    songtitle.textContent = songs[index].title;
                     songimage.src = songs[index].img_file;
                     console.log(index, songs[index]);
                     showProgressBar();
