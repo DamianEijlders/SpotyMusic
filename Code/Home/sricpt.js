@@ -65,7 +65,7 @@ fetch('../songs.json')
         });
 
         const volume = document.getElementById('Audiovolume');
-        volume.addEventListener('change', (e) => {
+        volume.addEventListener('input', (e) => {
             currentAudio.volume = e.currentTarget.value / 100;
         });
     });
