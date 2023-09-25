@@ -63,4 +63,9 @@ fetch('../songs.json')
                 currentAudio.play();
             }
         });
+
+        const volume = document.getElementById('Audiovolume');
+        volume.addEventListener('change', (e) => {
+            currentAudio.volume = e.currentTarget.value / 100;
+        });
     });
