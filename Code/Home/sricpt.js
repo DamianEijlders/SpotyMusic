@@ -3,14 +3,6 @@ const progressBar = document.getElementById('progressBar');
 const songtitle = document.getElementById('songtitle');
 const songimage = document.getElementById('songimage');
 
-function showProgressBar() {
-    progressBar.style.display = 'block';
-}
-
-function hideProgressBar() {
-    progressBar.style.display = 'none';
-}
-
 fetch('../songs.json')
     .then((response) => response.json())
     .then((data) => {
