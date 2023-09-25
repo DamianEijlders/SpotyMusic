@@ -1,7 +1,15 @@
 const songcards = document.getElementById('songcards');
-const progressBar = document.getElementById('progressBar');
 const songtitle = document.getElementById('songtitle');
 const songimage = document.getElementById('songimage');
+let currentAudio = null; // Track the currently playing audio
+
+// Function to stop the audio if it's playing
+function stopAudio() {
+    if (currentAudio && !currentAudio.paused) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0; // Reset to the beginning
+    }
+}
 
 fetch('../songs.json')
     .then((response) => response.json())
@@ -34,17 +42,25 @@ fetch('../songs.json')
       `;
             const button = card.querySelector('button');
             button.addEventListener('click', () => {
-                setTimeout(() => {
-                    songtitle.textContent = songs[index].title;
-                    songimage.src = songs[index].img_file;
-                    console.log(index, songs[index]);
-                    // play a mp3 file with the same index
-                    const audio = new Audio(songs[index].audio_file);
-                    console.log(songs[index].audio_file);
-                    audio.play();
-                }, 1000);
+                stopAudio(); // Stop the audio if it's playing
+                songtitle.textContent = songs[index].title;
+                songimage.src = songs[index].img_file;
+                console.log(index, songs[index]);
+                // play a mp3 file with the same index
+                const audio = new Audio(songs[index].audio_file);
+                currentAudio = audio; // Set the current audio
+                console.log(songs[index].audio_file);
+                audio.play();
             });
 
             songcards.appendChild(card);
+        });
+        const pausebtn = document.getElementById('pausebtn');
+        pausebtn.addEventListener('click', () => {
+            if (currentAudio && !currentAudio.paused) {
+                currentAudio.pause();
+            } else {
+                currentAudio.play();
+            }
         });
     });
