@@ -6,7 +6,7 @@
             "album": "Album 1",
             "year": 2020,
             "img_file": "../../Songs+Pic/Maroon5.jpg",
-            "audio_file": "../../Maroon5.mp3"
+            "audio_file": "../../Songs+Pic/Maroon5.mp3"
         },
         {
             "title": "Love",
@@ -14,7 +14,7 @@
             "album": "Album 2",
             "year": 2021,
             "img_file": "../../Songs+Pic/Love.jpg",
-            "audio_file": "../../Love.mp3"
+            "audio_file": "../../Songs+Pic/Love.mp3"
         },
         {
             "title": "Seven",
@@ -22,7 +22,7 @@
             "album": "Album 3",
             "year": 2022,
             "img_file": "../../Songs+Pic/Seven.jpg",
-            "audio_file": "../../Seven.mp3"
+            "audio_file": "../../Songs+Pic/Seven.mp3"
         }
     ]
 }

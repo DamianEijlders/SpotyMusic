@@ -46,7 +46,10 @@ fetch('../songs.json')
                     songtitle.textContent = songs[index].title;
                     songimage.src = songs[index].img_file;
                     console.log(index, songs[index]);
-                    showProgressBar();
+                    // play a mp3 file with the same index
+                    const audio = new Audio(songs[index].audio_file);
+                    console.log(songs[index].audio_file);
+                    audio.play();
                 }, 1000);
             });
 
