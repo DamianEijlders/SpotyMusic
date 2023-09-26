@@ -2,6 +2,16 @@ const songcards = document.getElementById('songcards');
 const songtitle = document.getElementById('songtitle');
 const songimage = document.getElementById('songimage');
 let currentAudio = null; // Track the currently playing audio
+const svgicon = document.getElementById('svgicon');
+
+const playicon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-white">
+<path fill-rule="evenodd" d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z" clip-rule="evenodd" />
+</svg>
+`;
+const pauseicon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-white">
+<path fill-rule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clip-rule="evenodd" />
+</svg>
+`;
 
 // Function to stop the audio if it's playing
 function stopAudio() {
@@ -17,50 +27,46 @@ fetch('../songs.json')
         const { songs } = data;
 
         songs.forEach((song, index) => {
-            const card = document.createElement('div');
-            card.classList = 'text-center';
-            card.innerHTML = `
-        <button class="">
-          <a
-            href="#"
-            class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
-          >
-            <h5
-              class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
-            >
-              ${song.title}
-            </h5>
-            <img src="${song.img_file}" alt="Song Image" class="object-cover w-full h-48 mb-6 rounded-lg" />
-            <p class="font-normal text-gray-700 dark:text-gray-400">
-              Artist: ${song.artist} | Album: ${song.album} | Year: ${song.year}
-            </p>
-            <p class="font-normal text-gray-700 dark:text-gray-400">
-              Index: ${index}
-            </p>
-          </a>
-        </button>
-      `;
-            const button = card.querySelector('button');
+            const card = document.getElementById('songTemplate').cloneNode(true);
+            card.querySelector('img').src = song.img_file;
+            card.querySelector('h5').innerHTML = song.title;
+            card.querySelector('p').innerHTML = `Artist: ${song.artist}<br> Album: ${song.album}<br> Year: ${song.year}`;
+
+            const button = card.querySelector('a');
             button.addEventListener('click', () => {
                 stopAudio(); // Stop the audio if it's playing
                 songtitle.textContent = songs[index].title;
                 songimage.src = songs[index].img_file;
                 console.log(index, songs[index]);
-                // play a mp3 file with the same index
                 const audio = new Audio(songs[index].audio_file);
                 currentAudio = audio; // Set the current audio
                 console.log(songs[index].audio_file);
                 audio.play();
+                svgicon.innerHTML = playicon;
             });
-
+            card.classList.remove('hidden');
             songcards.appendChild(card);
         });
-        const pausebtn = document.getElementById('pausebtn');
-        pausebtn.addEventListener('click', () => {
+
+        function toggleAudio() {
             if (currentAudio && !currentAudio.paused) {
                 currentAudio.pause();
+                svgicon.innerHTML = pauseicon;
             } else {
                 currentAudio.play();
+                svgicon.innerHTML = playicon;
+            }
+        }
+
+        const pausebtn = document.getElementById('pausebtn');
+        pausebtn.addEventListener('click', () => {
+            toggleAudio();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.keyCode === 32 || e.key === ' ') {
+                e.preventDefault();
+                toggleAudio();
             }
         });
 
