@@ -8,6 +8,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.js"
     integrity="sha512-Y9Uk9SbwwPXkLHrtpS/aoD0SjErNdsy5EDhW8roeCDg6EBPxmvLbTUGZCvmG2xTyDlGiGLYqGv0953K8+5MgXA=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="style.css">
   <title>SpotyMusic</title>
 </head>
 
@@ -99,7 +100,7 @@
     </button>
   </div>
 
-  <div id="progressBar"
+  <div id="guiunder"
     class="fixed bottom-0 left-0 z-50 grid w-full h-24 grid-cols-1 px-8 bg-white border-t border-gray-200 md:grid-cols-3 dark:bg-gray-700 dark:border-gray-600">
     <div class="items-center justify-center hidden mr-auto text-gray-500 dark:text-gray-400 md:flex">
       <img id="songimage" class="h-8 rounded mt-2" src="" />
@@ -108,11 +109,11 @@
     <div class="flex items-center w-full">
       <div class="w-full">
         <div class="flex items-center justify-center mx-auto mb-1">
-          <button data-tooltip-target="tooltip-shuffle" type="button"
+          <button id="shufflebtn" data-tooltip-target="tooltip-shuffle" type="button"
             class="p-2.5 group rounded-full hover:bg-gray-100 mr-1 hover:outline-none hover:ring-4 hover:ring-gray-200 dark:hover:ring-gray-600 dark:hover:bg-gray-600">
-            <svg class="w-4 h-4 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
+            <svg id="shufflesvg" class="w-4 h-4 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
               aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 18">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              <path id="shufflepath" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M11.484 6.166 13 4h6m0 0-3-3m3 3-3 3M1 14h5l1.577-2.253M1 4h5l7 10h6m0 0-3 3m3-3-3-3" />
             </svg>
             <span class="sr-only">Shuffle</span>
@@ -166,14 +167,14 @@
             Next Song
             <div class="tooltip-arrow" data-popper-arrow></div>
           </div>
-          <button data-tooltip-target="tooltip-restart" type="button"
+          <button id="repeatbtn" data-tooltip-target="tooltip-restart" type="button"
             class="p-2.5 group rounded-full hover:bg-gray-100 mr-1 hover:outline-none hover:ring-4 hover:ring-gray-200 dark:hover:ring-gray-600 dark:hover:bg-gray-600">
-            <svg class="w-4 h-4 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
+            <svg id="repeatsvg" class="w-4 h-4 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
               aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              <path id="repeatpath" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M16 1v5h-5M2 19v-5h5m10-4a8 8 0 0 1-14.947 3.97M1 10a8 8 0 0 1 14.947-3.97" />
             </svg>
-            <span class="sr-only">Repeat video</span>
+            <span class="sr-only">Repeat Song</span>
           </button>
           <div id="tooltip-restart" role="tooltip"
             class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
@@ -181,12 +182,12 @@
             <div class="tooltip-arrow" data-popper-arrow></div>
           </div>
         </div>
-        <div class="flex items-center justify-between space-x-2">
-          <span id="duration-currenttime" class="text-sm font-medium text-gray-500 dark:text-gray-400">3:45</span>
+        <div id="progressBar" class="flex items-center justify-between space-x-2">
+          <span id="duration-currenttime" class="text-sm font-medium text-gray-500 dark:text-gray-400">0:00</span>
           <div class="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-800">
-            <div class="bg-blue-600 h-1.5 rounded-full" style="width: 65%"></div>
+            <div id="progress" class="bg-blue-600 h-1.5 rounded-full" style="width: 0%"></div>
           </div>
-          <span id="duration" class="text-sm font-medium text-gray-500 dark:text-gray-400">5:00</span>
+          <span id="duration" class="text-sm font-medium text-gray-500 dark:text-gray-400">0:00</span>
         </div>
       </div>
     </div>
