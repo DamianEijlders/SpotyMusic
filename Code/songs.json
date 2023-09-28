@@ -26,6 +26,24 @@
             "img_file": "../../Songs+Pic/Seven.jpg",
             "audio_file": "../../Songs+Pic/Seven.mp3",
             "duration": "03:46"
+        },
+        {
+            "title": "Kid on Christmas",
+            "artist": "Artist 4",
+            "album": "Album 4",
+            "year": 2023,
+            "img_file": "../../Songs+Pic/KidonChristmas.jpg",
+            "audio_file": "../../Songs+Pic/KidonChristmas.mp3",
+            "duration": "03:23"
+        },
+        {
+            "title": "Kerst Cadeau",
+            "artist": "Artist 5",
+            "album": "Album 5",
+            "year": 2024,
+            "img_file": "../../Songs+Pic/Kerstcadeau.jpg",
+            "audio_file": "../../Songs+Pic/Kerstcadeau.mp3",
+            "duration": "03:50"
         }
     ]
 }

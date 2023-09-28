@@ -19,7 +19,7 @@ const pauseicon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" f
 function stopAudio() {
     if (currentAudio && !currentAudio.paused) {
         currentAudio.pause();
-        currentAudio.currentTime = 0; // Reset to the beginning
+        currentAudio.currentTime = 0;
     }
 }
 
@@ -32,7 +32,9 @@ fetch('../songs.json')
             const card = document.getElementById('songTemplate').cloneNode(true);
             card.querySelector('img').src = song.img_file;
             card.querySelector('h5').innerHTML = song.title;
-            card.querySelector('p').innerHTML = `Artist: ${song.artist}<br> Album: ${song.album}<br> Year: ${song.year}`;
+            card.querySelector(
+                'p',
+            ).innerHTML = `Artist: ${song.artist}<br> Album: ${song.album}<br> Year: ${song.year}`;
 
             const button = card.querySelector('a');
             button.addEventListener('click', () => {
@@ -49,10 +51,16 @@ fetch('../songs.json')
                 // Update the current playback duration every second
                 setInterval(() => {
                     if (currentAudio) {
-                        durationcurrent.innerHTML = new Date(currentAudio.currentTime * 1000).toISOString().substr(14, 5);
+                        durationcurrent.innerHTML = new Date(
+                            currentAudio.currentTime * 1000,
+                        )
+                            .toISOString()
+                            .substr(14, 5);
                         // for every second, update the progress width
                         const progress = document.getElementById('progress');
-                        progress.style.width = `${(currentAudio.currentTime / currentAudio.duration) * 100}%`;
+                        progress.style.width = `${
+                            (currentAudio.currentTime / currentAudio.duration) * 100
+                        }%`;
                     }
                 }, 1000);
                 if (currentAudio) {
