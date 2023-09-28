@@ -68,8 +68,14 @@ fetch('../songs.json')
                 const path = svg.querySelector('path');
                 if (path.getAttribute('stroke') === 'currentColor') {
                     path.setAttribute('stroke', 'rgb(59 130 246)');
-                    // shuffle the songs only if the current is finished playing
-                    songs.sort(() => Math.random() - 0.5);
+                    // When a song has finished playing, play a random song
+                    currentAudio.addEventListener('ended', () => {
+                        const randomSong = songs[index].audio_file[Math.floor(Math.random() * songs.length)];
+                        const audio = new Audio(randomSong.audio_file);
+                        currentAudio = audio;
+                        audio.play();
+                        svgicon.innerHTML = playicon;
+                    });
                 } else {
                     path.setAttribute('stroke', 'currentColor');
                     // unshuffle the songs
