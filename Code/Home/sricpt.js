@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 const songcards = document.getElementById('songcards');
 const songtitle = document.getElementById('songtitle');
 const songimage = document.getElementById('songimage');
