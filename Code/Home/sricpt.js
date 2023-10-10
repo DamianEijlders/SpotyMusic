@@ -145,36 +145,53 @@ function CreateCards() {
 function shuffle() {
     const songs = songdata;
     const path = document.getElementById('shufflepath');
-    let isFalse = false;
+    let isShuffleActive = false;
+
+    // Define the "ended" event handler function outside of the click event listener
+    function handleEnded() {
+        console.log('Song ended!');
+        const randomSong = songs[Math.floor(Math.random() * songs.length)];
+        stopAudio();
+        songtitle.textContent = randomSong.title;
+        songimage.src = randomSong.img_file;
+
+        console.log(randomSong);
+
+        const audio = new Audio(randomSong.audio_file);
+        currentAudio = audio;
+        currentAudio.play();
+        songduration = randomSong.duration;
+        duration.innerHTML = songduration;
+        svgicon.innerHTML = playicon;
+        DurationUpdate();
+        currentAudio.addEventListener('ended', handleEnded);
+    }
 
     document.getElementById('shufflebtn').addEventListener('click', () => {
-        if (isFalse) {
+        if (isShuffleActive) {
             path.setAttribute('stroke', 'currentColor');
-            isFalse = false;
+            console.log('Shuffle is now OFF');
+            currentAudio.addEventListener('ended', handleEnded);
+            if (currentAudio) {
+                currentAudio.removeEventListener('ended', handleEnded);
+            }
         } else {
             path.setAttribute('stroke', 'rgb(59 130 246)');
-            isFalse = true;
+            console.log('Shuffle is now ON');
+            currentAudio.addEventListener('ended', handleEnded);
+            
             if (currentAudio) {
-                currentAudio.addEventListener('ended', () => {
-                    const randomSong = songs[Math.floor(Math.random() * songs.length)];
-                    stopAudio();
-                    songtitle.textContent = randomSong.title;
-                    songimage.src = randomSong.img_file;
-
-                    console.log(randomSong);
-                    
-                    const audio = new Audio(randomSong.audio_file);
-                    currentAudio = audio;
-                    currentAudio.play();
-                    songduration = randomSong.duration;
-                    duration.innerHTML = songduration;
-                    svgicon.innerHTML = playicon;
-                    DurationUpdate();
-                });
+                currentAudio.addEventListener('ended', handleEnded);
             }
         }
+
+        isShuffleActive = !isShuffleActive;
     });
+    
 }
+
+
+
 
 fetch('../songs.json')
     .then((response) => response.json())
