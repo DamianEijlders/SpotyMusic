@@ -8,6 +8,7 @@ const duration = document.getElementById('duration');
 let songduration;
 
 let songdata = {};
+songdata = JSON.parse(localStorage.getItem('songs'));
 
 const playicon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-white">
 <path fill-rule="evenodd" d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z" clip-rule="evenodd" />
@@ -36,7 +37,7 @@ function DurationUpdate() {
             // for every second, update the progress width
             const progress = document.getElementById('progress');
             progress.style.width = `${(currentAudio.currentTime / currentAudio.duration) * 100
-            }%`;
+                }%`;
         }
     }, 1000);
 }
@@ -55,29 +56,6 @@ function repeat() {
             path.setAttribute('stroke', 'currentColor');
             // make the current song not repeat
             currentAudio.loop = false;
-        }
-    });
-}
-
-function shuffle() {
-    // change color on click
-    const svg = document.getElementById('shufflesvg');
-    const path = svg.querySelector('path');
-
-    document.getElementById('shufflebtn').addEventListener('click', () => {
-        if (path.getAttribute('stroke') === 'currentColor') {
-            path.setAttribute('stroke', 'rgb(59 130 246)');
-            console.log('shuffle');
-            // Shuffle the songs after it has ended playing
-            currentAudio.addEventListener('ended', () => {
-                console.log('ended');
-                const cards = document.getElementById('template');
-                const random = Math.floor(Math.random() * cards.length);
-                const button = cards[random].querySelector('a');
-                button.click();
-            });
-        } else {
-            path.setAttribute('stroke', 'currentColor');
         }
     });
 }
@@ -133,50 +111,81 @@ function audioslider() {
     });
 }
 
-console.log(songdata);
+function CreateCards() {
+    const songs = songdata;
+    songs.forEach((song, index) => {
+        const card = document.getElementById('songTemplate').cloneNode(true);
+        card.querySelector('img').src = song.img_file;
+        card.querySelector('h5').innerHTML = song.title;
+        card.querySelector(
+            'p',
+        ).innerHTML = `Artist: ${song.artist}<br> Album: ${song.album}<br> Year: ${song.year}`;
+
+        const button = card.querySelector('a');
+        button.addEventListener('click', () => {
+            stopAudio();
+            songtitle.textContent = songs[index].title;
+            songimage.src = songs[index].img_file;
+
+            console.log(index, songs[index]);
+
+            const audio = new Audio(songs[index].audio_file);
+            currentAudio = audio;
+            currentAudio.play();
+            songduration = songs[index].duration;
+            svgicon.innerHTML = playicon;
+            duration.innerHTML = songduration;
+            DurationUpdate();
+        });
+        card.classList.remove('hidden');
+        songcards.appendChild(card);
+    });
+}
+
+function shuffle() {
+    const songs = songdata;
+    const path = document.getElementById('shufflepath');
+    let isFalse = false;
+
+    document.getElementById('shufflebtn').addEventListener('click', () => {
+        if (isFalse) {
+            path.setAttribute('stroke', 'currentColor');
+            isFalse = false;
+        } else {
+            path.setAttribute('stroke', 'rgb(59 130 246)');
+            isFalse = true;
+            if (currentAudio) {
+                currentAudio.addEventListener('ended', () => {
+                    const randomSong = songs[Math.floor(Math.random() * songs.length)];
+                    stopAudio();
+                    songtitle.textContent = randomSong.title;
+                    songimage.src = randomSong.img_file;
+
+                    console.log(randomSong);
+                    
+                    const audio = new Audio(randomSong.audio_file);
+                    currentAudio = audio;
+                    currentAudio.play();
+                    songduration = randomSong.duration;
+                    duration.innerHTML = songduration;
+                    svgicon.innerHTML = playicon;
+                    DurationUpdate();
+                });
+            }
+        }
+    });
+}
 
 fetch('../songs.json')
     .then((response) => response.json())
     .then((data) => {
         const { songs } = data;
-        songdata = data;
-
-        songs.forEach((song, index) => {
-            const card = document.getElementById('songTemplate').cloneNode(true);
-            card.querySelector('img').src = song.img_file;
-            card.querySelector('h5').innerHTML = song.title;
-            card.querySelector(
-                'p',
-            ).innerHTML = `Artist: ${song.artist}<br> Album: ${song.album}<br> Year: ${song.year}`;
-
-            const button = card.querySelector('a');
-            button.addEventListener('click', () => {
-                stopAudio();
-                songtitle.textContent = songs[index].title;
-                songimage.src = songs[index].img_file;
-
-                console.log(index, songs[index]);
-
-                const audio = new Audio(songs[index].audio_file);
-                currentAudio = audio;
-
-                console.log(songs[index].audio_file);
-
-                audio.play();
-                songduration = songs[index].duration;
-                svgicon.innerHTML = playicon;
-                duration.innerHTML = songduration;
-                DurationUpdate();
-            });
-            card.classList.remove('hidden');
-            songcards.appendChild(card);
-        });
-
-        repeat();
-
-        shuffle();
+        localStorage.setItem('songs', JSON.stringify(songs));
     });
 
+CreateCards();
+repeat();
+shuffle();
 PausePlay();
 PausePlayKey();
 TimeBack();
