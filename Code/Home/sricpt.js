@@ -1,12 +1,13 @@
-/* eslint-disable max-len */
 const songcards = document.getElementById('songcards');
 const songtitle = document.getElementById('songtitle');
 const songimage = document.getElementById('songimage');
-let currentAudio = null; // Track the currently playing audio
+let currentAudio = null;
 const svgicon = document.getElementById('svgicon');
 const durationcurrent = document.getElementById('duration-currenttime');
 const duration = document.getElementById('duration');
 let songduration;
+
+let songdata = {};
 
 const playicon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-white">
 <path fill-rule="evenodd" d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z" clip-rule="evenodd" />
@@ -17,7 +18,6 @@ const pauseicon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" f
 </svg>
 `;
 
-// Function to stop the audio if it's playing
 function stopAudio() {
     if (currentAudio && !currentAudio.paused) {
         currentAudio.pause();
@@ -41,17 +41,108 @@ function DurationUpdate() {
     }, 1000);
 }
 
-// get the songs duration from the json file in the global scope
+function repeat() {
+    document.getElementById('repeatbtn').addEventListener('click', () => {
+        // change color on click
+        const svg = document.getElementById('repeatsvg');
+        console.log('repeat');
+        const path = svg.querySelector('path');
+        if (path.getAttribute('stroke') === 'currentColor') {
+            path.setAttribute('stroke', 'rgb(59 130 246)');
+            // make the current song repeat
+            currentAudio.loop = true;
+        } else {
+            path.setAttribute('stroke', 'currentColor');
+            // make the current song not repeat
+            currentAudio.loop = false;
+        }
+    });
+}
 
+function shuffle() {
+    // change color on click
+    const svg = document.getElementById('shufflesvg');
+    const path = svg.querySelector('path');
+
+    document.getElementById('shufflebtn').addEventListener('click', () => {
+        if (path.getAttribute('stroke') === 'currentColor') {
+            path.setAttribute('stroke', 'rgb(59 130 246)');
+            console.log('shuffle');
+            // Shuffle the songs after it has ended playing
+            currentAudio.addEventListener('ended', () => {
+                console.log('ended');
+                const cards = document.getElementById('template');
+                const random = Math.floor(Math.random() * cards.length);
+                const button = cards[random].querySelector('a');
+                button.click();
+            });
+        } else {
+            path.setAttribute('stroke', 'currentColor');
+        }
+    });
+}
+
+function toggleAudio() {
+    if (currentAudio && !currentAudio.paused) {
+        currentAudio.pause();
+        svgicon.innerHTML = pauseicon;
+    } else {
+        currentAudio.play();
+        svgicon.innerHTML = playicon;
+    }
+}
+
+function PausePlay() {
+    const pausebtn = document.getElementById('pausebtn');
+    pausebtn.addEventListener('click', () => {
+        toggleAudio();
+    });
+}
+
+function TimeBack() {
+    document.addEventListener('keydown', (e) => {
+        if (e.keyCode === 37 || e.key === ' ') {
+            e.preventDefault();
+            currentAudio.currentTime -= 5;
+        }
+    });
+}
+
+function TimeForward() {
+    document.addEventListener('keydown', (e) => {
+        if (e.keyCode === 39 || e.key === ' ') {
+            e.preventDefault();
+            currentAudio.currentTime += 5;
+        }
+    });
+}
+
+function PausePlayKey() {
+    document.addEventListener('keydown', (e) => {
+        if (e.keyCode === 32 || e.key === ' ') {
+            e.preventDefault();
+            toggleAudio();
+        }
+    });
+}
+
+function audioslider() {
+    const volume = document.getElementById('Audiovolume');
+    volume.addEventListener('input', (e) => {
+        currentAudio.volume = e.currentTarget.value / 100;
+    });
+}
+
+console.log(songdata);
 
 fetch('../songs.json')
     .then((response) => response.json())
     .then((data) => {
         const { songs } = data;
+        songdata = data;
 
         songs.forEach((song, index) => {
             const card = document.getElementById('songTemplate').cloneNode(true);
-            songduration = songs[index].duration;
             card.querySelector('img').src = song.img_file;
             card.querySelector('h5').innerHTML = song.title;
             card.querySelector(
@@ -60,87 +151,34 @@ fetch('../songs.json')
 
             const button = card.querySelector('a');
             button.addEventListener('click', () => {
-                stopAudio(); // Stop the audio if it's playing
+                stopAudio();
                 songtitle.textContent = songs[index].title;
                 songimage.src = songs[index].img_file;
+
                 console.log(index, songs[index]);
+
                 const audio = new Audio(songs[index].audio_file);
-                currentAudio = audio; // Set the current audio
+                currentAudio = audio;
+
                 console.log(songs[index].audio_file);
+
                 audio.play();
+                songduration = songs[index].duration;
                 svgicon.innerHTML = playicon;
                 duration.innerHTML = songduration;
                 DurationUpdate();
             });
             card.classList.remove('hidden');
             songcards.appendChild(card);
-
-            document.getElementById('repeatbtn').addEventListener('click', () => {
-                // change color on click
-                const svg = document.getElementById('repeatsvg');
-                const path = svg.querySelector('path');
-                if (path.getAttribute('stroke') === 'currentColor') {
-                    path.setAttribute('stroke', 'rgb(59 130 246)');
-                    // make the current song repeat
-                    currentAudio.loop = true;
-                } else {
-                    path.setAttribute('stroke', 'currentColor');
-                    // make the current song not repeat
-                    currentAudio.loop = false;
-                }
-            });
         });
 
-        document.getElementById('shufflebtn').addEventListener('click', () => {
-            // change color on click
-            const svg = document.getElementById('shufflesvg');
-            const path = svg.querySelector('path');
-            if (path.getAttribute('stroke') === 'currentColor') {
-                path.setAttribute('stroke', 'rgb(59 130 246)');
-                currentAudio.addEventListener('ended', () => {
-                    // get a random song from the songs array when the current song ends and play it
-                    const randomsong = songs[Math.floor(Math.random() * songs.length)];
-                    songtitle.textContent = randomsong.title;
-                    songimage.src = randomsong.img_file;
-                    console.log(randomsong);
-                    const audio = new Audio(randomsong.audio_file);
-                    currentAudio = audio; // Set the current audio
-                    DurationUpdate();
-                    duration.innerHTML = randomsong.duration;
-                    audio.play();
-                    svgicon.innerHTML = playicon;
-                });
-            } else {
-                path.setAttribute('stroke', 'currentColor');
-                // unshuffle the songs
-                songs.sort((a, b) => a.id - b.id);
-            }
-        });
+        repeat();
 
-        function toggleAudio() {
-            if (currentAudio && !currentAudio.paused) {
-                currentAudio.pause();
-                svgicon.innerHTML = pauseicon;
-            } else {
-                currentAudio.play();
-                svgicon.innerHTML = playicon;
-            }
-        }
-
-        const pausebtn = document.getElementById('pausebtn');
-        pausebtn.addEventListener('click', () => {
-            toggleAudio();
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.keyCode === 32 || e.key === ' ') {
-                e.preventDefault();
-                toggleAudio();
-            }
-        });
-
-        const volume = document.getElementById('Audiovolume');
-        volume.addEventListener('input', (e) => {
-            currentAudio.volume = e.currentTarget.value / 100;
-        });
+        shuffle();
     });
+
+PausePlay();
+PausePlayKey();
+TimeBack();
+TimeForward();
+audioslider();
