@@ -6,6 +6,7 @@ let currentAudio = null; // Track the currently playing audio
 const svgicon = document.getElementById('svgicon');
 const durationcurrent = document.getElementById('duration-currenttime');
 const duration = document.getElementById('duration');
+let songduration;
 
 const playicon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-white">
 <path fill-rule="evenodd" d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z" clip-rule="evenodd" />
@@ -23,6 +24,25 @@ function stopAudio() {
         currentAudio.currentTime = 0;
     }
 }
+
+function DurationUpdate() {
+    setInterval(() => {
+        if (currentAudio) {
+            durationcurrent.innerHTML = new Date(
+                currentAudio.currentTime * 1000,
+            )
+                .toISOString()
+                .substr(14, 5);
+            // for every second, update the progress width
+            const progress = document.getElementById('progress');
+            progress.style.width = `${(currentAudio.currentTime / currentAudio.duration) * 100
+            }%`;
+        }
+    }, 1000);
+}
+
+// get the songs duration from the json file in the global scope
+
 
 fetch('../songs.json')
     .then((response) => response.json())
@@ -48,49 +68,12 @@ fetch('../songs.json')
                 console.log(songs[index].audio_file);
                 audio.play();
                 svgicon.innerHTML = playicon;
-
-                // Update the current playback duration every second
-                setInterval(() => {
-                    if (currentAudio) {
-                        durationcurrent.innerHTML = new Date(
-                            currentAudio.currentTime * 1000,
-                        )
-                            .toISOString()
-                            .substr(14, 5);
-                        // for every second, update the progress width
-                        const progress = document.getElementById('progress');
-                        progress.style.width = `${
-                            (currentAudio.currentTime / currentAudio.duration) * 100
-                        }%`;
-                    }
-                }, 1000);
-                if (currentAudio) {
-                    duration.innerHTML = songs[index].duration;
-                }
+                songduration = songs[index].duration;
+                duration.innerHTML = songduration;
+                DurationUpdate();
             });
             card.classList.remove('hidden');
             songcards.appendChild(card);
-
-            document.getElementById('shufflebtn').addEventListener('click', () => {
-                // change color on click
-                const svg = document.getElementById('shufflesvg');
-                const path = svg.querySelector('path');
-                if (path.getAttribute('stroke') === 'currentColor') {
-                    path.setAttribute('stroke', 'rgb(59 130 246)');
-                    // When a song has finished playing, play a random song
-                    currentAudio.addEventListener('ended', () => {
-                        const randomSong = songs[index].audio_file[Math.floor(Math.random() * songs.length)];
-                        const audio = new Audio(randomSong.audio_file);
-                        currentAudio = audio;
-                        audio.play();
-                        svgicon.innerHTML = playicon;
-                    });
-                } else {
-                    path.setAttribute('stroke', 'currentColor');
-                    // unshuffle the songs
-                    songs.sort((a, b) => a.id - b.id);
-                }
-            });
 
             document.getElementById('repeatbtn').addEventListener('click', () => {
                 // change color on click
@@ -106,6 +89,32 @@ fetch('../songs.json')
                     currentAudio.loop = false;
                 }
             });
+        });
+
+        document.getElementById('shufflebtn').addEventListener('click', () => {
+            // change color on click
+            const svg = document.getElementById('shufflesvg');
+            const path = svg.querySelector('path');
+            if (path.getAttribute('stroke') === 'currentColor') {
+                path.setAttribute('stroke', 'rgb(59 130 246)');
+                currentAudio.addEventListener('ended', () => {
+                    // get a random song from the songs array when the current song ends and play it
+                    const randomsong = songs[Math.floor(Math.random() * songs.length)];
+                    songtitle.textContent = randomsong.title;
+                    songimage.src = randomsong.img_file;
+                    console.log(randomsong);
+                    const audio = new Audio(randomsong.audio_file);
+                    currentAudio = audio; // Set the current audio
+                    DurationUpdate();
+                    duration.innerHTML = randomsong.duration;
+                    audio.play();
+                    svgicon.innerHTML = playicon;
+                });
+            } else {
+                path.setAttribute('stroke', 'currentColor');
+                // unshuffle the songs
+                songs.sort((a, b) => a.id - b.id);
+            }
         });
 
         function toggleAudio() {
