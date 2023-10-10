@@ -51,6 +51,7 @@ fetch('../songs.json')
 
         songs.forEach((song, index) => {
             const card = document.getElementById('songTemplate').cloneNode(true);
+            songduration = songs[index].duration;
             card.querySelector('img').src = song.img_file;
             card.querySelector('h5').innerHTML = song.title;
             card.querySelector(
@@ -68,7 +69,6 @@ fetch('../songs.json')
                 console.log(songs[index].audio_file);
                 audio.play();
                 svgicon.innerHTML = playicon;
-                songduration = songs[index].duration;
                 duration.innerHTML = songduration;
                 DurationUpdate();
             });
