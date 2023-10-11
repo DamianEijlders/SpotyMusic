@@ -136,7 +136,7 @@ function Volmute() {
         volume.value = Lastvolume;
         Volmuteicon.innerHTML = volicon;
         if (currentAudio) {
-            currentAudio.volume = 1;
+            currentAudio.volume = Lastvolume / 100;
         }
     } else {
         volume.value = 0;
@@ -181,6 +181,8 @@ function VolumeMuteKey() {
         }
     });
 }
+
+// eventlistener for volume slider so when the volume changes the icon changes to volicon
 
 function Audioslider() {
     volume.addEventListener('input', (e) => {
@@ -282,14 +284,23 @@ function Shuffle() {
 
 }
 
-// Adding data to local storage
-fetch('../songs.json')
+function fetchdatda() {
+    fetch('../songs.json')
     .then((response) => response.json())
     .then((data) => {
         const { songs } = data;
         localStorage.setItem('songs', JSON.stringify(songs));
     });
+}
 
+if (localStorage.getItem('songs') === null) {
+    fetchdatda();
+} else {
+    remove.localStorage('songs');
+    fetchdatda();
+}
+
+fetchdatda();
 CreateCards();
 Repeat();
 Shuffle();

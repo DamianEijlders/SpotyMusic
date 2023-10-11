@@ -44,6 +44,15 @@
             "img_file": "../../Songs+Pic/Kerstcadeau.jpg",
             "audio_file": "../../Songs+Pic/Kerstcadeau.mp3",
             "duration": "03:50"
+        },
+        {
+            "title": "Change",
+            "artist": "Artist 6",
+            "album": "Album 6",
+            "year": 2025,
+            "img_file": "../../Songs+Pic/Change.png",
+            "audio_file": "../../Songs+Pic/Change.mp3",
+            "duration": "03:22"
         }
     ]
 }
