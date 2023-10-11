@@ -65,11 +65,15 @@ function repeat() {
 
 function toggleAudio() {
     if (currentAudio && !currentAudio.paused) {
-        currentAudio.pause();
         svgicon.innerHTML = pauseicon;
+        if (currentAudio) {
+            currentAudio.pause();
+        }
     } else {
-        currentAudio.play();
         svgicon.innerHTML = playicon;
+        if (currentAudio) {
+            currentAudio.play();
+        }
     }
 }
 
@@ -110,7 +114,9 @@ function PausePlayKey() {
 function audioslider() {
     const volume = document.getElementById('Audiovolume');
     volume.addEventListener('input', (e) => {
-        currentAudio.volume = e.currentTarget.value / 100;
+        if (currentAudio) {
+            currentAudio.volume = e.currentTarget.value / 100;
+        }
     });
 }
 
