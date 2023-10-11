@@ -1,13 +1,18 @@
 const songcards = document.getElementById('songcards');
 const songtitle = document.getElementById('songtitle');
 const songimage = document.getElementById('songimage');
-let currentAudio = null;
-const svgicon = document.getElementById('svgicon');
+const volume = document.getElementById('Audiovolume');
+const VolBtn = document.getElementById('VolBtn');
+const svgicon = document.getElementById('pausesvgicon');
 const durationcurrent = document.getElementById('duration-currenttime');
 const duration = document.getElementById('duration');
+const volmuteicon = document.getElementById('volmuteicon');
+let currentAudio = null;
 let songduration;
 let lastRandomSong = null;
+let isMuted = false;
 
+// Getting data out of the local storage
 let songdata = {};
 songdata = JSON.parse(localStorage.getItem('songs'));
 
@@ -19,6 +24,17 @@ const pauseicon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" f
 <path fill-rule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clip-rule="evenodd" />
 </svg>
 `;
+
+const muteicon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5" style="color: rgb(209 213 219)">
+<path d="M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.508c-1.141 0-2.318.664-2.66 1.905A9.76 9.76 0 001.5 12c0 .898.121 1.768.35 2.595.341 1.24 1.518 1.905 2.659 1.905h1.93l4.5 4.5c.945.945 2.561.276 2.561-1.06V4.06zM17.78 9.22a.75.75 0 10-1.06 1.06L18.44 12l-1.72 1.72a.75.75 0 001.06 1.06l1.72-1.72 1.72 1.72a.75.75 0 101.06-1.06L20.56 12l1.72-1.72a.75.75 0 00-1.06-1.06l-1.72 1.72-1.72-1.72z" />
+</svg>
+`;
+
+const volicon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5" style="color: rgb(209 213 219)">
+<path d="M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.508c-1.141 0-2.318.664-2.66 1.905A9.76 9.76 0 001.5 12c0 .898.121 1.768.35 2.595.341 1.24 1.518 1.905 2.659 1.905h1.93l4.5 4.5c.945.945 2.561.276 2.561-1.06V4.06zM18.584 5.106a.75.75 0 011.06 0c3.808 3.807 3.808 9.98 0 13.788a.75.75 0 11-1.06-1.06 8.25 8.25 0 000-11.668.75.75 0 010-1.06z" />
+<path d="M15.932 7.757a.75.75 0 011.061 0 6 6 0 010 8.486.75.75 0 01-1.06-1.061 4.5 4.5 0 000-6.364.75.75 0 010-1.06z" />
+</svg>
+`
 
 function stopAudio() {
     if (currentAudio && !currentAudio.paused) {
@@ -111,12 +127,64 @@ function PausePlayKey() {
     });
 }
 
+function volmute() {
+    if (isMuted) {
+        volume.value = 50;
+        volmuteicon.innerHTML = volicon;
+        if (currentAudio) {
+            currentAudio.volume = 1;
+        }
+    } else {
+        volume.value = 0;
+        volmuteicon.innerHTML = muteicon;
+
+        if (currentAudio) {
+            currentAudio.volume = 0;
+        }
+    }
+    isMuted = !isMuted;
+}
+
+function volvalue() {
+    document.addEventListener('keydown', (e) => {
+        if (e.keyCode === 38 || e.key === ' ') {
+            e.preventDefault();
+            volume.value = Number(volume.value) + 5;
+            if (currentAudio) {
+                currentAudio.volume = volume.value / 100;
+            }
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.keyCode === 40 || e.key === ' ') {
+            e.preventDefault();
+            volume.value = Number(volume.value) - 5;
+            if (currentAudio) {
+                currentAudio.volume = volume.value / 100;
+            }
+        }
+    });
+}
+
+function VolumeMuteKey() {
+    document.addEventListener('keydown', (e) => {
+        if (e.keyCode === 77 || e.key === 'm') {
+            e.preventDefault();
+            volmute();
+        }
+    });
+}
+
 function audioslider() {
-    const volume = document.getElementById('Audiovolume');
     volume.addEventListener('input', (e) => {
         if (currentAudio) {
             currentAudio.volume = e.currentTarget.value / 100;
         }
+    });
+
+    VolBtn.addEventListener('click', () => {
+        volmute();
     });
 }
 
@@ -204,6 +272,7 @@ function shuffle() {
 
 }
 
+// Adding data to local storage
 fetch('../songs.json')
     .then((response) => response.json())
     .then((data) => {
@@ -219,5 +288,5 @@ PausePlayKey();
 TimeBack();
 TimeForward();
 audioslider();
-
-// on click of the volume icon set icon value to 0 and change the icon to mute icon
+VolumeMuteKey();
+volvalue();

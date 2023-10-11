@@ -8,7 +8,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.js"
     integrity="sha512-Y9Uk9SbwwPXkLHrtpS/aoD0SjErNdsy5EDhW8roeCDg6EBPxmvLbTUGZCvmG2xTyDlGiGLYqGv0953K8+5MgXA=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css">
   <title>SpotyMusic</title>
 </head>
 
@@ -85,13 +85,9 @@
 
   <div id="songcards" class="grid grid-cols-3 gap-4 sm:ml-96 mt-3 mr-32 mb-28">
     <button class="hidden min-w-full" id="songTemplate">
-      <a
-        href="#"
-        class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
-      >
-        <h5
-          class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
-        >
+      <a href="#"
+        class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
         </h5>
         <img src="" alt="Song Image" class="object-cover w-full h-48 mb-6 rounded-lg" />
         <p class="font-normal text-gray-700 dark:text-gray-400">
@@ -111,9 +107,11 @@
         <div class="flex items-center justify-center mx-auto mb-1">
           <button id="shufflebtn" data-tooltip-target="tooltip-shuffle" type="button"
             class="p-2.5 group rounded-full hover:bg-gray-100 mr-1 hover:outline-none hover:ring-4 hover:ring-gray-200 dark:hover:ring-gray-600 dark:hover:bg-gray-600">
-            <svg id="shufflesvg" class="w-4 h-4 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
+            <svg id="shufflesvg"
+              class="w-4 h-4 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
               aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 18">
-              <path id="shufflepath" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              <path id="shufflepath" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2"
                 d="M11.484 6.166 13 4h6m0 0-3-3m3 3-3 3M1 14h5l1.577-2.253M1 4h5l7 10h6m0 0-3 3m3-3-3-3" />
             </svg>
             <span class="sr-only">Shuffle</span>
@@ -139,8 +137,9 @@
           </div>
           <button id="pausebtn" data-tooltip-target="tooltip-pause" type="button"
             class="inline-flex items-center justify-center p-2.5 mx-2 font-medium bg-blue-600 rounded-full hover:bg-blue-700 group hover:ring-4 hover:ring-blue-300 hover:outline-none dark:hover:ring-blue-800">
-            <div id="svgicon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-white">
+            <div id="pausesvgicon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                class="w-5 h-5 text-white">
                 <path fill-rule="evenodd"
                   d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z"
                   clip-rule="evenodd" />
@@ -169,10 +168,11 @@
           </div>
           <button id="repeatbtn" data-tooltip-target="tooltip-restart" type="button"
             class="p-2.5 group rounded-full hover:bg-gray-100 mr-1 hover:outline-none hover:ring-4 hover:ring-gray-200 dark:hover:ring-gray-600 dark:hover:bg-gray-600">
-            <svg id="repeatsvg" class="w-4 h-4 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
+            <svg id="repeatsvg"
+              class="w-4 h-4 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
               aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
-              <path id="repeatpath" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M16 1v5h-5M2 19v-5h5m10-4a8 8 0 0 1-14.947 3.97M1 10a8 8 0 0 1 14.947-3.97" />
+              <path id="repeatpath" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2" d="M16 1v5h-5M2 19v-5h5m10-4a8 8 0 0 1-14.947 3.97M1 10a8 8 0 0 1 14.947-3.97" />
             </svg>
             <span class="sr-only">Repeat Song</span>
           </button>
@@ -212,13 +212,17 @@
         Toggle captions
         <div class="tooltip-arrow" data-popper-arrow></div>
       </div>
-      <button data-tooltip-target="tooltip-volume" type="button"
+      <button id="VolBtn" data-tooltip-target="tooltip-volume" type="button"
         class="p-2.5 group rounded-full hover:bg-gray-100 hover:outline-none hover:ring-4 hover:ring-gray-200 dark:hover:ring-gray-600 dark:hover:bg-gray-600">
-        <svg class="w-4 h-4 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
-          aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
-          <path
-            d="M10.836.357a1.978 1.978 0 0 0-2.138.3L3.63 5H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h1.63l5.07 4.344a1.985 1.985 0 0 0 2.142.299A1.98 1.98 0 0 0 12 15.826V2.174A1.98 1.98 0 0 0 10.836.357Zm2.728 4.695a1.001 1.001 0 0 0-.29 1.385 4.887 4.887 0 0 1 0 5.126 1 1 0 0 0 1.674 1.095A6.645 6.645 0 0 0 16 9a6.65 6.65 0 0 0-1.052-3.658 1 1 0 0 0-1.384-.29Zm4.441-2.904a1 1 0 0 0-1.664 1.11A10.429 10.429 0 0 1 18 9a10.465 10.465 0 0 1-1.614 5.675 1 1 0 1 0 1.674 1.095A12.325 12.325 0 0 0 20 9a12.457 12.457 0 0 0-1.995-6.852Z" />
-        </svg>
+        <div id="volmuteicon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-white"
+            style="color: rgb(209 213 219)">
+            <path
+              d="M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.508c-1.141 0-2.318.664-2.66 1.905A9.76 9.76 0 001.5 12c0 .898.121 1.768.35 2.595.341 1.24 1.518 1.905 2.659 1.905h1.93l4.5 4.5c.945.945 2.561.276 2.561-1.06V4.06zM18.584 5.106a.75.75 0 011.06 0c3.808 3.807 3.808 9.98 0 13.788a.75.75 0 11-1.06-1.06 8.25 8.25 0 000-11.668.75.75 0 010-1.06z" />
+            <path
+              d="M15.932 7.757a.75.75 0 011.061 0 6 6 0 010 8.486.75.75 0 01-1.06-1.061 4.5 4.5 0 000-6.364.75.75 0 010-1.06z" />
+          </svg>
+        </div>
         <span class="sr-only">Adjust volume</span>
       </button>
       <div id="tooltip-volume" role="tooltip"
