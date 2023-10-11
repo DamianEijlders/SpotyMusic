@@ -45,18 +45,20 @@ function DurationUpdate() {
 
 function repeat() {
     document.getElementById('repeatbtn').addEventListener('click', () => {
-        // change color on click
         const svg = document.getElementById('repeatsvg');
-        console.log('repeat');
         const path = svg.querySelector('path');
         if (path.getAttribute('stroke') === 'currentColor') {
             path.setAttribute('stroke', 'rgb(59 130 246)');
-            // make the current song repeat
-            currentAudio.loop = true;
+            console.log('Loop is now ON');
+            if (currentAudio) {
+                currentAudio.loop = false;
+            }
         } else {
             path.setAttribute('stroke', 'currentColor');
-            // make the current song not repeat
-            currentAudio.loop = false;
+            console.log('Loop is now OFF');
+            if (currentAudio) {
+                currentAudio.loop = true;
+            }
         }
     });
 }
