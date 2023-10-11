@@ -6,11 +6,13 @@ const VolBtn = document.getElementById('VolBtn');
 const svgicon = document.getElementById('pausesvgicon');
 const durationcurrent = document.getElementById('duration-currenttime');
 const duration = document.getElementById('duration');
-const volmuteicon = document.getElementById('volmuteicon');
+const Volmuteicon = document.getElementById('volmuteicon');
 let currentAudio = null;
 let songduration;
 let lastRandomSong = null;
 let isMuted = false;
+let isloopfalse = false;
+let Lastvolume = 0;
 
 // Getting data out of the local storage
 let songdata = {};
@@ -36,7 +38,7 @@ const volicon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fil
 </svg>
 `
 
-function stopAudio() {
+function StopAudio() {
     if (currentAudio && !currentAudio.paused) {
         currentAudio.pause();
         currentAudio.currentTime = 0;
@@ -59,23 +61,25 @@ function DurationUpdate() {
     }, 1000);
 }
 
-function repeat() {
+function Repeat() {
     document.getElementById('repeatbtn').addEventListener('click', () => {
         const svg = document.getElementById('repeatsvg');
         const path = svg.querySelector('path');
-        if (path.getAttribute('stroke') === 'currentColor') {
-            path.setAttribute('stroke', 'rgb(59 130 246)');
-            console.log('Loop is now ON');
+        if (isloopfalse) {
+            path.setAttribute('stroke', 'currentColor');
+            console.log('Loop is now OFF');
             if (currentAudio) {
                 currentAudio.loop = false;
             }
         } else {
-            path.setAttribute('stroke', 'currentColor');
-            console.log('Loop is now OFF');
+            path.setAttribute('stroke', 'rgb(59 130 246)');
+            console.log('Loop is now ON');
             if (currentAudio) {
                 currentAudio.loop = true;
+                currentAudio.play();
             }
         }
+        isloopfalse = !isloopfalse;
     });
 }
 
@@ -127,16 +131,16 @@ function PausePlayKey() {
     });
 }
 
-function volmute() {
+function Volmute() {
     if (isMuted) {
-        volume.value = 50;
-        volmuteicon.innerHTML = volicon;
+        volume.value = Lastvolume;
+        Volmuteicon.innerHTML = volicon;
         if (currentAudio) {
             currentAudio.volume = 1;
         }
     } else {
         volume.value = 0;
-        volmuteicon.innerHTML = muteicon;
+        Volmuteicon.innerHTML = muteicon;
 
         if (currentAudio) {
             currentAudio.volume = 0;
@@ -145,11 +149,12 @@ function volmute() {
     isMuted = !isMuted;
 }
 
-function volvalue() {
+function Volvalue() {
     document.addEventListener('keydown', (e) => {
         if (e.keyCode === 38 || e.key === ' ') {
             e.preventDefault();
             volume.value = Number(volume.value) + 5;
+            Lastvolume = volume.value;
             if (currentAudio) {
                 currentAudio.volume = volume.value / 100;
             }
@@ -160,6 +165,7 @@ function volvalue() {
         if (e.keyCode === 40 || e.key === ' ') {
             e.preventDefault();
             volume.value = Number(volume.value) - 5;
+            Lastvolume = volume.value;
             if (currentAudio) {
                 currentAudio.volume = volume.value / 100;
             }
@@ -171,12 +177,12 @@ function VolumeMuteKey() {
     document.addEventListener('keydown', (e) => {
         if (e.keyCode === 77 || e.key === 'm') {
             e.preventDefault();
-            volmute();
+            Volmute();
         }
     });
 }
 
-function audioslider() {
+function Audioslider() {
     volume.addEventListener('input', (e) => {
         if (currentAudio) {
             currentAudio.volume = e.currentTarget.value / 100;
@@ -184,7 +190,7 @@ function audioslider() {
     });
 
     VolBtn.addEventListener('click', () => {
-        volmute();
+        Volmute();
     });
 }
 
@@ -200,26 +206,30 @@ function CreateCards() {
 
         const button = card.querySelector('a');
         button.addEventListener('click', () => {
-            stopAudio();
+            StopAudio();
             songtitle.textContent = songs[index].title;
             songimage.src = songs[index].img_file;
-
-            console.log(index, songs[index]);
-
             const audio = new Audio(songs[index].audio_file);
             currentAudio = audio;
             currentAudio.play();
+            if (volume.value === 0) {
+                currentAudio.volume = 0;
+            } else {
+                currentAudio.volume = volume.value / 100;
+            }
             songduration = songs[index].duration;
             svgicon.innerHTML = playicon;
             duration.innerHTML = songduration;
             DurationUpdate();
+
+            console.log(index, songs[index]);
         });
         card.classList.remove('hidden');
         songcards.appendChild(card);
     });
 }
 
-function shuffle() {
+function Shuffle() {
     const songs = songdata;
     const path = document.getElementById('shufflepath');
     let isShuffleActive = false;
@@ -233,7 +243,7 @@ function shuffle() {
 
         lastRandomSong = randomSong;
 
-        stopAudio();
+        StopAudio();
         songtitle.textContent = randomSong.title;
         songimage.src = randomSong.img_file;
 
@@ -281,12 +291,12 @@ fetch('../songs.json')
     });
 
 CreateCards();
-repeat();
-shuffle();
+Repeat();
+Shuffle();
 PausePlay();
 PausePlayKey();
 TimeBack();
 TimeForward();
-audioslider();
+Audioslider();
 VolumeMuteKey();
-volvalue();
+Volvalue();
