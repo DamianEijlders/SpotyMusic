@@ -219,3 +219,5 @@ PausePlayKey();
 TimeBack();
 TimeForward();
 audioslider();
+
+// on click of the volume icon set icon value to 0 and change the icon to mute icon
