@@ -6,6 +6,7 @@ const svgicon = document.getElementById('svgicon');
 const durationcurrent = document.getElementById('duration-currenttime');
 const duration = document.getElementById('duration');
 let songduration;
+let lastRandomSong = null;
 
 let songdata = {};
 songdata = JSON.parse(localStorage.getItem('songs'));
@@ -147,10 +148,15 @@ function shuffle() {
     const path = document.getElementById('shufflepath');
     let isShuffleActive = false;
 
-    // Define the "ended" event handler function outside of the click event listener
     function handleEnded() {
         console.log('Song ended!');
-        const randomSong = songs[Math.floor(Math.random() * songs.length)];
+
+        do {
+            randomSong = songs[Math.floor(Math.random() * songs.length)];
+        } while (randomSong === lastRandomSong);
+
+        lastRandomSong = randomSong;
+
         stopAudio();
         songtitle.textContent = randomSong.title;
         songimage.src = randomSong.img_file;
@@ -167,19 +173,19 @@ function shuffle() {
         currentAudio.addEventListener('ended', handleEnded);
     }
 
+
     document.getElementById('shufflebtn').addEventListener('click', () => {
         if (isShuffleActive) {
             path.setAttribute('stroke', 'currentColor');
             console.log('Shuffle is now OFF');
-            currentAudio.addEventListener('ended', handleEnded);
+
             if (currentAudio) {
                 currentAudio.removeEventListener('ended', handleEnded);
             }
         } else {
             path.setAttribute('stroke', 'rgb(59 130 246)');
             console.log('Shuffle is now ON');
-            currentAudio.addEventListener('ended', handleEnded);
-            
+
             if (currentAudio) {
                 currentAudio.addEventListener('ended', handleEnded);
             }
@@ -187,11 +193,8 @@ function shuffle() {
 
         isShuffleActive = !isShuffleActive;
     });
-    
+
 }
-
-
-
 
 fetch('../songs.json')
     .then((response) => response.json())
