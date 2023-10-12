@@ -182,14 +182,17 @@ function VolumeMuteKey() {
     });
 }
 
-// eventlistener for volume slider so when the volume changes the icon changes to volicon
-
 // Let the songs play in index order so when ever you skip or go back the next or previous song is in the index order
 
 function Audioslider() {
     volume.addEventListener('input', (e) => {
         if (currentAudio) {
             currentAudio.volume = e.currentTarget.value / 100;
+            if (currentAudio.volume === 0) {
+                Volmuteicon.innerHTML = muteicon;
+            } else {
+                Volmuteicon.innerHTML = volicon;
+            }
         }
     });
 
