@@ -182,8 +182,6 @@ function VolumeMuteKey() {
     });
 }
 
-// Let the songs play in index order so when ever you skip or go back the next or previous song is in the index order
-
 function Audioslider() {
     volume.addEventListener('input', (e) => {
         if (currentAudio) {
@@ -320,3 +318,8 @@ TimeForward();
 Audioslider();
 VolumeMuteKey();
 Volvalue();
+
+
+// Let the songs play in index order so when ever you skip or go back the next or previous song is in the index order
+
+// if you click on view playlist you will see the songs in the index order that will be played next
