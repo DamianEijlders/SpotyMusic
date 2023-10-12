@@ -184,6 +184,8 @@ function VolumeMuteKey() {
 
 // eventlistener for volume slider so when the volume changes the icon changes to volicon
 
+// Let the songs play in index order so when ever you skip or go back the next or previous song is in the index order
+
 function Audioslider() {
     volume.addEventListener('input', (e) => {
         if (currentAudio) {
@@ -284,23 +286,27 @@ function Shuffle() {
 
 }
 
+function checkTime() {
+    const TimeAdded = localStorage.getItem('TimeAdded');
+    const TimeNow = new Date().getMinutes() + ':' + new Date().getSeconds();
+    if (TimeNow - TimeAdded > 1) {
+        fetchdatda();
+    }
+}
+
 function fetchdatda() {
     fetch('../songs.json')
     .then((response) => response.json())
     .then((data) => {
         const { songs } = data;
         localStorage.setItem('songs', JSON.stringify(songs));
+        const TimeAdded = new Date().getMinutes() + ':' + new Date().getSeconds();
+        localStorage.setItem('TimeAdded', TimeAdded);
     });
 }
 
-if (localStorage.getItem('songs') === null) {
-    fetchdatda();
-} else {
-    remove.localStorage('songs');
-    fetchdatda();
-}
-
 fetchdatda();
+checkTime();
 CreateCards();
 Repeat();
 Shuffle();
