@@ -19,14 +19,6 @@ let Lastvolume = 50;
 // Getting data out of the local storage
 let songdata = {};
 songdata = JSON.parse(localStorage.getItem('songs'));
-// If the time added is older then 1 minute then remove the data and fetch new data
-const TimeAdded = localStorage.getItem('TimeAdded');
-const TimeNow = new Date().getMinutes() + ':' + new Date().getSeconds();
-if (TimeNow - TimeAdded > 1) {
-    localStorage.removeItem('songs');
-    localStorage.removeItem('TimeAdded');
-    fetchdatda();
-}
 
 const playicon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-white">
 <path fill-rule="evenodd" d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z" clip-rule="evenodd" />
@@ -237,23 +229,23 @@ nextbtn.addEventListener('click', () => {
 
 function prevSong() {
     const songs = songdata;
-    const currentSong = songs.findIndex((song) => song.title === songtitle.textContent);
-    const prevSong = songs[(currentSong - 1 + songs.length) % songs.length];
-    StopAudio();
-    songtitle.textContent = prevSong.title;
-    songimage.src = prevSong.img_file;
-    const audio = new Audio(prevSong.audio_file);
-    currentAudio = audio;
-    currentAudio.play();
-    if (volume.value === 0) {
-        currentAudio.volume = 0;
-    } else {
-        currentAudio.volume = volume.value / 100;
-    }
-    songduration = prevSong.duration;
-    svgicon.innerHTML = playicon;
-    duration.innerHTML = songduration;
-    DurationUpdate();
+        const currentSong = songs.findIndex((song) => song.title === songtitle.textContent);
+        const prevSong = songs[(currentSong - 1 + songs.length) % songs.length];
+        StopAudio();
+        songtitle.textContent = prevSong.title;
+        songimage.src = prevSong.img_file;
+        const audio = new Audio(prevSong.audio_file);
+        currentAudio = audio;
+        currentAudio.play();
+        if (volume.value === 0) {
+            currentAudio.volume = 0;
+        } else {
+            currentAudio.volume = volume.value / 100;
+        }
+        songduration = prevSong.duration;
+        svgicon.innerHTML = playicon;
+        duration.innerHTML = songduration;
+        DurationUpdate();
 }
 
 prevbtn.addEventListener('click', () => {
@@ -262,12 +254,12 @@ prevbtn.addEventListener('click', () => {
 
 function skipsongKeys() {
     document.addEventListener('keydown', (e) => {
-        if (e.keyCode === 78 || e.key === ' ') {
+        if (e.keyCode === 78 || e.key === 'n') {
             e.preventDefault();
             skipSong();
         }
 
-        if (e.keyCode === 80 || e.key === ' ') {
+        if (e.keyCode === 80 || e.key === 'p') {
             e.preventDefault();
             prevSong();
         }

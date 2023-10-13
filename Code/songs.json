@@ -53,6 +53,15 @@
             "img_file": "../../Songs+Pic/Change.png",
             "audio_file": "../../Songs+Pic/Change.mp3",
             "duration": "03:22"
+        },
+        {
+            "title": "Burning",
+            "artist": "Artist 7",
+            "album": "Album 7",
+            "year": 2026,
+            "img_file": "../../Songs+Pic/Burning.jpg",
+            "audio_file": "../../Songs+Pic/Burning.mp3",
+            "duration": "05:24"
         }
     ]
 }
