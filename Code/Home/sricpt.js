@@ -7,16 +7,26 @@ const svgicon = document.getElementById('pausesvgicon');
 const durationcurrent = document.getElementById('duration-currenttime');
 const duration = document.getElementById('duration');
 const Volmuteicon = document.getElementById('volmuteicon');
+const nextbtn = document.getElementById('nextbtn');
+const prevbtn = document.getElementById('prevbtn');
 let currentAudio = null;
 let songduration;
 let lastRandomSong = null;
 let isMuted = false;
 let isloopfalse = false;
-let Lastvolume = 0;
+let Lastvolume = 50;
 
 // Getting data out of the local storage
 let songdata = {};
 songdata = JSON.parse(localStorage.getItem('songs'));
+// If the time added is older then 1 minute then remove the data and fetch new data
+const TimeAdded = localStorage.getItem('TimeAdded');
+const TimeNow = new Date().getMinutes() + ':' + new Date().getSeconds();
+if (TimeNow - TimeAdded > 1) {
+    localStorage.removeItem('songs');
+    localStorage.removeItem('TimeAdded');
+    fetchdatda();
+}
 
 const playicon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-white">
 <path fill-rule="evenodd" d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z" clip-rule="evenodd" />
@@ -131,30 +141,13 @@ function PausePlayKey() {
     });
 }
 
-function Volmute() {
-    if (isMuted) {
-        volume.value = Lastvolume;
-        Volmuteicon.innerHTML = volicon;
-        if (currentAudio) {
-            currentAudio.volume = Lastvolume / 100;
-        }
-    } else {
-        volume.value = 0;
-        Volmuteicon.innerHTML = muteicon;
-
-        if (currentAudio) {
-            currentAudio.volume = 0;
-        }
-    }
-    isMuted = !isMuted;
-}
-
 function Volvalue() {
     document.addEventListener('keydown', (e) => {
         if (e.keyCode === 38 || e.key === ' ') {
             e.preventDefault();
             volume.value = Number(volume.value) + 5;
             Lastvolume = volume.value;
+            Volmuteicon.innerHTML = volicon;
             if (currentAudio) {
                 currentAudio.volume = volume.value / 100;
             }
@@ -166,11 +159,29 @@ function Volvalue() {
             e.preventDefault();
             volume.value = Number(volume.value) - 5;
             Lastvolume = volume.value;
+            Volmuteicon.innerHTML = volicon;
             if (currentAudio) {
                 currentAudio.volume = volume.value / 100;
             }
         }
     });
+}
+
+function Volmute() {
+    if (isMuted) {
+        volume.value = Lastvolume;
+        Volmuteicon.innerHTML = volicon;
+        if (currentAudio) {
+            currentAudio.volume = Lastvolume / 100;
+        }
+    } else {
+        volume.value = 0;
+        Volmuteicon.innerHTML = muteicon;
+        if (currentAudio) {
+            currentAudio.volume = 0;
+        }
+    }
+    isMuted = !isMuted;
 }
 
 function VolumeMuteKey() {
@@ -196,6 +207,70 @@ function Audioslider() {
 
     VolBtn.addEventListener('click', () => {
         Volmute();
+    });
+}
+
+function skipSong() {
+    const songs = songdata;
+    const currentSong = songs.findIndex((song) => song.title === songtitle.textContent);
+    const nextSong = songs[(currentSong + 1) % songs.length];
+    StopAudio();
+    songtitle.textContent = nextSong.title;
+    songimage.src = nextSong.img_file;
+    const audio = new Audio(nextSong.audio_file);
+    currentAudio = audio;
+    currentAudio.play();
+    if (volume.value === 0) {
+        currentAudio.volume = 0;
+    } else {
+        currentAudio.volume = volume.value / 100;
+    }
+    songduration = nextSong.duration;
+    svgicon.innerHTML = playicon;
+    duration.innerHTML = songduration;
+    DurationUpdate();
+}
+
+nextbtn.addEventListener('click', () => {
+    skipSong();
+});
+
+function prevSong() {
+    const songs = songdata;
+    const currentSong = songs.findIndex((song) => song.title === songtitle.textContent);
+    const prevSong = songs[(currentSong - 1 + songs.length) % songs.length];
+    StopAudio();
+    songtitle.textContent = prevSong.title;
+    songimage.src = prevSong.img_file;
+    const audio = new Audio(prevSong.audio_file);
+    currentAudio = audio;
+    currentAudio.play();
+    if (volume.value === 0) {
+        currentAudio.volume = 0;
+    } else {
+        currentAudio.volume = volume.value / 100;
+    }
+    songduration = prevSong.duration;
+    svgicon.innerHTML = playicon;
+    duration.innerHTML = songduration;
+    DurationUpdate();
+}
+
+prevbtn.addEventListener('click', () => {
+    prevSong();
+});
+
+function skipsongKeys() {
+    document.addEventListener('keydown', (e) => {
+        if (e.keyCode === 78 || e.key === ' ') {
+            e.preventDefault();
+            skipSong();
+        }
+
+        if (e.keyCode === 80 || e.key === ' ') {
+            e.preventDefault();
+            prevSong();
+        }
     });
 }
 
@@ -297,16 +372,15 @@ function checkTime() {
 
 function fetchdatda() {
     fetch('../songs.json')
-    .then((response) => response.json())
-    .then((data) => {
-        const { songs } = data;
-        localStorage.setItem('songs', JSON.stringify(songs));
-        const TimeAdded = new Date().getMinutes() + ':' + new Date().getSeconds();
-        localStorage.setItem('TimeAdded', TimeAdded);
-    });
+        .then((response) => response.json())
+        .then((data) => {
+            const { songs } = data;
+            localStorage.setItem('songs', JSON.stringify(songs));
+            const TimeAdded = new Date().getMinutes() + ':' + new Date().getSeconds();
+            localStorage.setItem('TimeAdded', TimeAdded);
+        });
 }
 
-fetchdatda();
 checkTime();
 CreateCards();
 Repeat();
@@ -318,8 +392,6 @@ TimeForward();
 Audioslider();
 VolumeMuteKey();
 Volvalue();
-
-
-// Let the songs play in index order so when ever you skip or go back the next or previous song is in the index order
+skipsongKeys();
 
 // if you click on view playlist you will see the songs in the index order that will be played next
