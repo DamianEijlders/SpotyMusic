@@ -11,6 +11,8 @@ const nextbtn = document.getElementById('nextbtn');
 const prevbtn = document.getElementById('prevbtn');
 const expandbtn = document.getElementById('expandbtn');
 const sidebar = document.getElementById('cta-button-sidebar');
+const songinfullscreen = document.getElementById('fullscreen');
+let currentsongdata = null;
 let currentAudio = null;
 let songduration;
 let lastRandomSong = null;
@@ -297,6 +299,7 @@ function CreateCards() {
             DurationUpdate();
 
             console.log(index, songs[index]);
+            currentsongdata = songs[index];
         });
         card.classList.remove('hidden');
         songcards.appendChild(card);
@@ -381,10 +384,18 @@ function GoFullscreen() {
         if (songcards.classList.contains('hidden')) {
             songcards.classList.remove('hidden');
             sidebar.classList.remove('hidden');
+            songinfullscreen.classList.add('hidden'); 
         }
         else {
             songcards.classList.add('hidden');
             sidebar.classList.add('hidden');
+            songinfullscreen.classList.remove('hidden');
+            const fullscreensong = document.getElementById('templatefullscreen').cloneNode(true);
+            fullscreensong.querySelector('img').src = currentsongdata.img_file;
+            fullscreensong.querySelector('h6').textContent = currentsongdata.title;
+            songinfullscreen.appendChild(fullscreensong);
+            console.log(fullscreensong);
+            console.log(currentsongdata);
         }
     });
 }
