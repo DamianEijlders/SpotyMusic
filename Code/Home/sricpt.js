@@ -9,6 +9,8 @@ const duration = document.getElementById('duration');
 const Volmuteicon = document.getElementById('volmuteicon');
 const nextbtn = document.getElementById('nextbtn');
 const prevbtn = document.getElementById('prevbtn');
+const expandbtn = document.getElementById('expandbtn');
+const sidebar = document.getElementById('cta-button-sidebar');
 let currentAudio = null;
 let songduration;
 let lastRandomSong = null;
@@ -229,23 +231,23 @@ nextbtn.addEventListener('click', () => {
 
 function prevSong() {
     const songs = songdata;
-        const currentSong = songs.findIndex((song) => song.title === songtitle.textContent);
-        const prevSong = songs[(currentSong - 1 + songs.length) % songs.length];
-        StopAudio();
-        songtitle.textContent = prevSong.title;
-        songimage.src = prevSong.img_file;
-        const audio = new Audio(prevSong.audio_file);
-        currentAudio = audio;
-        currentAudio.play();
-        if (volume.value === 0) {
-            currentAudio.volume = 0;
-        } else {
-            currentAudio.volume = volume.value / 100;
-        }
-        songduration = prevSong.duration;
-        svgicon.innerHTML = playicon;
-        duration.innerHTML = songduration;
-        DurationUpdate();
+    const currentSong = songs.findIndex((song) => song.title === songtitle.textContent);
+    const prevSong = songs[(currentSong - 1 + songs.length) % songs.length];
+    StopAudio();
+    songtitle.textContent = prevSong.title;
+    songimage.src = prevSong.img_file;
+    const audio = new Audio(prevSong.audio_file);
+    currentAudio = audio;
+    currentAudio.play();
+    if (volume.value === 0) {
+        currentAudio.volume = 0;
+    } else {
+        currentAudio.volume = volume.value / 100;
+    }
+    songduration = prevSong.duration;
+    svgicon.innerHTML = playicon;
+    duration.innerHTML = songduration;
+    DurationUpdate();
 }
 
 prevbtn.addEventListener('click', () => {
@@ -373,6 +375,20 @@ function fetchdatda() {
         });
 }
 
+function GoFullscreen() {
+    expandbtn.addEventListener('click', () => {
+        // check if songcards contains class hidden
+        if (songcards.classList.contains('hidden')) {
+            songcards.classList.remove('hidden');
+            sidebar.classList.remove('hidden');
+        }
+        else {
+            songcards.classList.add('hidden');
+            sidebar.classList.add('hidden');
+        }
+    });
+}
+
 checkTime();
 CreateCards();
 Repeat();
@@ -385,5 +401,6 @@ Audioslider();
 VolumeMuteKey();
 Volvalue();
 skipsongKeys();
+GoFullscreen();
 
 // if you click on view playlist you will see the songs in the index order that will be played next
