@@ -414,7 +414,6 @@ function GoFullscreen() {
 }
 
 expandbtn.addEventListener('click', () => {
-    // fisrt click will go fullscreen if clicked again it will exit fullscreen
     if (document.fullscreenElement) {
         document.exitFullscreen();
         exitfullscreen();
