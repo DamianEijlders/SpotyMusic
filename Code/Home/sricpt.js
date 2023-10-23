@@ -225,6 +225,8 @@ function skipSong() {
     svgicon.innerHTML = playicon;
     duration.innerHTML = songduration;
     DurationUpdate();
+    currentsongdata = nextSong;
+    templateclonefs();
 }
 
 nextbtn.addEventListener('click', () => {
@@ -250,6 +252,8 @@ function prevSong() {
     svgicon.innerHTML = playicon;
     duration.innerHTML = songduration;
     DurationUpdate();
+    currentsongdata = prevSong;
+    templateclonefs();
 }
 
 prevbtn.addEventListener('click', () => {
@@ -298,7 +302,6 @@ function CreateCards() {
             duration.innerHTML = songduration;
             DurationUpdate();
 
-            console.log(index, songs[index]);
             currentsongdata = songs[index];
         });
         card.classList.remove('hidden');
@@ -378,27 +381,68 @@ function fetchdatda() {
         });
 }
 
-function GoFullscreen() {
-    expandbtn.addEventListener('click', () => {
-        // check if songcards contains class hidden
-        if (songcards.classList.contains('hidden')) {
-            songcards.classList.remove('hidden');
-            sidebar.classList.remove('hidden');
-            songinfullscreen.classList.add('hidden'); 
-        }
-        else {
-            songcards.classList.add('hidden');
-            sidebar.classList.add('hidden');
-            songinfullscreen.classList.remove('hidden');
-            const fullscreensong = document.getElementById('templatefullscreen').cloneNode(true);
-            fullscreensong.querySelector('img').src = currentsongdata.img_file;
-            fullscreensong.querySelector('h6').textContent = currentsongdata.title;
-            songinfullscreen.appendChild(fullscreensong);
-            console.log(fullscreensong);
-            console.log(currentsongdata);
-        }
-    });
+function templateclonefs() {
+    const fullscreensong = document.getElementById('templatefullscreen').cloneNode(true);
+    fullscreensong.classList.remove('hidden');
+    fullscreensong.querySelector('img').src = currentsongdata.img_file;
+    fullscreensong.querySelector('h6').textContent = currentsongdata.title;
+    songinfullscreen.innerHTML = '';
+    songinfullscreen.appendChild(fullscreensong);
 }
+
+function fullscreen() {
+    if (document.fullscreenElement) {
+        document.exitFullscreen();
+    }
+    else {
+        document.documentElement.requestFullscreen();
+    }
+}
+
+function exitfullscreen() {
+    songcards.classList.remove('hidden');
+    sidebar.classList.remove('hidden');
+    songinfullscreen.classList.add('hidden');
+}
+
+function GoFullscreen() {
+    fullscreen();
+    songcards.classList.add('hidden');
+    sidebar.classList.add('hidden');
+    songinfullscreen.classList.remove('hidden');
+    templateclonefs();
+}
+
+expandbtn.addEventListener('click', () => {
+    // fisrt click will go fullscreen if clicked again it will exit fullscreen
+    if (document.fullscreenElement) {
+        document.exitFullscreen();
+        exitfullscreen();
+    } else {
+        GoFullscreen();
+    }
+}
+);
+// // esc has to be pressed twice to exit fullscreen because browser default is to exit fullscreen on esc and takes priority over my function
+// document.addEventListener('keydown', (e) => {
+//     if (e.keyCode === 27 || e.key === 'Escape') {
+//         e.preventDefault();
+//         exitfullscreen();
+//     }
+// });
+
+document.addEventListener('keydown', (e) => {
+    if (e.keyCode === 70 || e.key === 'f') {
+        e.preventDefault();
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
+            exitfullscreen();
+        } else {
+            GoFullscreen();
+        }
+    }
+});
+
 
 checkTime();
 CreateCards();
@@ -412,6 +456,5 @@ Audioslider();
 VolumeMuteKey();
 Volvalue();
 skipsongKeys();
-GoFullscreen();
 
 // if you click on view playlist you will see the songs in the index order that will be played next

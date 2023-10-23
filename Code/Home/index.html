@@ -12,7 +12,7 @@
   <title>SpotyMusic</title>
 </head>
 
-<body class="bg-gray-600">
+<body class="dark:bg-gray-600">
   <button data-drawer-target="cta-button-sidebar" data-drawer-toggle="cta-button-sidebar"
     aria-controls="cta-button-sidebar" type="button"
     class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 hover:outline-none hover:ring-2 hover:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:ring-gray-600">
@@ -96,11 +96,16 @@
     </button>
   </div>
 
-  <div id="fullscreen" class="hidden">
-    <div id="templatefullscreen">
-      <h6 class="text-5xl text-center mt-8 text-white font-bold"></h6>
-      <img class="h-auto max-w-full rounded-lg flex justify-center" src="" alt="">
-  </div>
+  <div id="fullscreen">
+    <div id="templatefullscreen" class="flex items-center justify-center class hidden">
+      <div id="exist" class="dark:bg-gray-800 w-full h-screen">
+        <h6 class="text-5xl text-center mt-8 text-white font-bold mb-6">
+        </h6>
+        <div class="flex justify-center">
+          <img class="rounded-lg h-96 mb-6" src="" alt="">
+        </div>
+      </div>
+    </div>
   </div>
 
   <div id="guiunder"
