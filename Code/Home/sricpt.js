@@ -20,7 +20,6 @@ let isMuted = false;
 let isloopfalse = false;
 let Lastvolume = 50;
 
-// Getting data out of the local storage
 let songdata = {};
 songdata = JSON.parse(localStorage.getItem('songs'));
 
@@ -422,23 +421,19 @@ expandbtn.addEventListener('click', () => {
     }
 }
 );
-// // esc has to be pressed twice to exit fullscreen because browser default is to exit fullscreen on esc and takes priority over my function
-// document.addEventListener('keydown', (e) => {
-//     if (e.keyCode === 27 || e.key === 'Escape') {
-//         e.preventDefault();
-//         exitfullscreen();
-//     }
-// });
+
+if (document.fullscreenEnabled) {
+    document.addEventListener('fullscreenchange', () => {
+        if (!document.fullscreenElement) {
+            exitfullscreen();
+        }
+    });
+}
 
 document.addEventListener('keydown', (e) => {
     if (e.keyCode === 70 || e.key === 'f') {
         e.preventDefault();
-        if (document.fullscreenElement) {
-            document.exitFullscreen();
-            exitfullscreen();
-        } else {
-            GoFullscreen();
-        }
+        GoFullscreen();
     }
 });
 
@@ -457,3 +452,6 @@ Volvalue();
 skipsongKeys();
 
 // if you click on view playlist you will see the songs in the index order that will be played next
+// fullscreen songs will show on pres of next song or prev song
+
+// fix the shuffle songs
