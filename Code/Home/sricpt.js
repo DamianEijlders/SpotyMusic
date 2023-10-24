@@ -58,7 +58,6 @@ function DurationUpdate() {
             )
                 .toISOString()
                 .substr(14, 5);
-            // for every second, update the progress width
             const progress = document.getElementById('progress');
             progress.style.width = `${(currentAudio.currentTime / currentAudio.duration) * 100
                 }%`;
@@ -111,7 +110,7 @@ function PausePlay() {
 
 function TimeBack() {
     document.addEventListener('keydown', (e) => {
-        if (e.keyCode === 37 || e.key === ' ') {
+        if (e.keyCode === 37 || e.key === '') {
             e.preventDefault();
             currentAudio.currentTime -= 5;
         }
@@ -120,7 +119,7 @@ function TimeBack() {
 
 function TimeForward() {
     document.addEventListener('keydown', (e) => {
-        if (e.keyCode === 39 || e.key === ' ') {
+        if (e.keyCode === 39 || e.key === '') {
             e.preventDefault();
             currentAudio.currentTime += 5;
         }
@@ -331,6 +330,11 @@ function Shuffle() {
         const audio = new Audio(randomSong.audio_file);
         currentAudio = audio;
         currentAudio.play();
+        if (volume.value === 0) {
+            currentAudio.volume = 0;
+        } else {
+            currentAudio.volume = volume.value / 100;
+        }
         songduration = randomSong.duration;
         duration.innerHTML = songduration;
         svgicon.innerHTML = playicon;
@@ -338,25 +342,19 @@ function Shuffle() {
         currentAudio.addEventListener('ended', handleEnded);
     }
 
-
     document.getElementById('shufflebtn').addEventListener('click', () => {
-        if (isShuffleActive) {
-            path.setAttribute('stroke', 'currentColor');
-            console.log('Shuffle is now OFF');
-
-            if (currentAudio) {
+        if (currentAudio) {
+            if (isShuffleActive) {
+                path.setAttribute('stroke', 'currentColor');
+                console.log('Shuffle is now OFF');
                 currentAudio.removeEventListener('ended', handleEnded);
-            }
-        } else {
-            path.setAttribute('stroke', 'rgb(59 130 246)');
-            console.log('Shuffle is now ON');
-
-            if (currentAudio) {
+            } else {
+                path.setAttribute('stroke', 'rgb(59 130 246)');
+                console.log('Shuffle is now ON');
                 currentAudio.addEventListener('ended', handleEnded);
             }
+            isShuffleActive = !isShuffleActive;
         }
-
-        isShuffleActive = !isShuffleActive;
     });
 
 }
@@ -437,9 +435,12 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
+if (!songdata) {
+    fetchdatda();
+}
 
-checkTime();
 CreateCards();
+checkTime();
 Repeat();
 Shuffle();
 PausePlay();
@@ -452,6 +453,6 @@ Volvalue();
 skipsongKeys();
 
 // if you click on view playlist you will see the songs in the index order that will be played next
-// fullscreen songs will show on pres of next song or prev song
+// fullscreen songs will show on press of next song or prev song
 
 // fix the shuffle songs
