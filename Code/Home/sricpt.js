@@ -12,6 +12,8 @@ const prevbtn = document.getElementById('prevbtn');
 const expandbtn = document.getElementById('expandbtn');
 const sidebar = document.getElementById('cta-button-sidebar');
 const songinfullscreen = document.getElementById('fullscreen');
+const fullscreentitle = document.getElementById('fullscreentitle');
+const fullscreenimg = document.getElementById('fullscreenimg');
 let currentsongdata = null;
 let currentAudio = null;
 let songduration;
@@ -313,8 +315,6 @@ function Shuffle() {
     let isShuffleActive = false;
 
     function handleEnded() {
-        console.log('Song ended!');
-
         do {
             randomSong = songs[Math.floor(Math.random() * songs.length)];
         } while (randomSong === lastRandomSong);
@@ -322,10 +322,11 @@ function Shuffle() {
         lastRandomSong = randomSong;
 
         StopAudio();
-        songtitle.textContent = randomSong.title;
+        songtitle.innerHTML = randomSong.title;
         songimage.src = randomSong.img_file;
-
         console.log(randomSong);
+        fullscreenimg.src = randomSong.img_file;
+        fullscreentitle.innerHTML = randomSong.title;
 
         const audio = new Audio(randomSong.audio_file);
         currentAudio = audio;
@@ -379,12 +380,10 @@ function fetchdatda() {
 }
 
 function templateclonefs() {
-    const fullscreensong = document.getElementById('templatefullscreen').cloneNode(true);
+    const fullscreensong = document.getElementById('fullscreen');
     fullscreensong.classList.remove('hidden');
-    fullscreensong.querySelector('img').src = currentsongdata.img_file;
-    fullscreensong.querySelector('h6').textContent = currentsongdata.title;
-    songinfullscreen.innerHTML = '';
-    songinfullscreen.appendChild(fullscreensong);
+    fullscreenimg.src = currentsongdata.img_file;
+    fullscreentitle.innerHTML = currentsongdata.title;
 }
 
 function fullscreen() {
