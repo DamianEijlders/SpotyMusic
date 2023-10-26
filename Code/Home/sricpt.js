@@ -78,11 +78,11 @@ function Repeat() {
                 currentAudio.loop = false;
             }
         } else {
-            path.setAttribute('stroke', 'rgb(59 130 246)');
-            console.log('Loop is now ON');
             if (currentAudio) {
                 currentAudio.loop = true;
                 currentAudio.play();
+                path.setAttribute('stroke', 'rgb(59 130 246)');
+                console.log('Loop is now ON');
             }
         }
         isloopfalse = !isloopfalse;
@@ -434,7 +434,7 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-if (!songdata) {
+if (songdata) {
     fetchdatda();
 }
 
