@@ -436,6 +436,8 @@ document.addEventListener('keydown', (e) => {
 
 if (songdata) {
     fetchdatda();
+} else {
+    fetchdatda();
 }
 
 CreateCards();
