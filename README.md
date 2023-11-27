@@ -26,5 +26,6 @@ This web application allows you to perform various actions like playing music an
 
 Contributions are welcome! Feel free to create a pull request or open an issue on the [GitHub repository](https://github.com/DamianEijlders/SpotyMusic) to contribute to the project.
 
+## Screenshots
 ![Homepage](./Images/SpotyMusic%20Homepage.png)
 ![Fullscreen](./Images/SpotyMusic%20Fullscreenpng.png)
